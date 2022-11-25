@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/25 12:20:19 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/25 18:31:36 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,37 @@
 #include<sys/stat.h>
 #include<fcntl.h>
 
+int BUFFER_SIZE = 5;
+
+char *malloc_free(char *line)
+{
+	int i;
+	i = 0;
+	while (!(line))
+	{
+		free(line);
+		i++;
+	}
+	line = ft_calloc(1,sizeof(char));
+	return (line);
+}
+
 char *get_next_line(int fd)
 {
 	int read_byte;
 	char *memo;
-	int BUFFER_SIZE;
-	int i;
 	static char *save;
-	int flag;
-
-	BUFFER_SIZE = 5;
 	char *temp;
 	char *line;
-	int j;
-	j = 0;
-	// for(int a = 0;a < 5;a++)
-	// printf("最初のsave: %s\n",save);
+
 	
 	if (!save)
 		save = ft_calloc(1,sizeof(char));
 
 	memo = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!memo)
-		return (0);
-	// printf("~~~~~~~~~~~~~~~~~~~~~test1~~~~~~~~~~\n");
+		return (malloc_free(memo));
 	read_byte = read(fd,memo, BUFFER_SIZE);
-	i = 0;
 
 	if (read_byte < 0)
 		return (0);
@@ -59,74 +64,52 @@ char *get_next_line(int fd)
 
 		if (save == 0)
 			save = &memo[0];
-		// printf("%s", find);
-		// printf("保存されたsave:%s\n",save);
-
-		// printf ("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜テスト１〜〜〜〜〜〜〜〜〜\n%s\n",save);
 
 		while(ft_strchr(memo,'\n') != 0)
 		{
 			*find = 0;
-			j++;
-			// printf("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜%d回目の改行発見~~~~~~~~~~\n",j);
-			// printf("%s\n",save);
-			// printf("%s\n",memo);
-
 			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(memo)) + 1));
+			// if (!line)
+			// {
+			// 	malloc_free(line);
+			// 	return (malloc_free)
+			// }
 			line = ft_strjoin(save,memo);
-			// printf ("%s",ft_strjoin(save,memo));
-			// printf ("%s\n",line);
 			save[0] = 0;
 			save = find +1 ;
-			// printf("現時点でのsave");
-			// printf("%s\n", save);
-			// printf("line: %s\n",line);
 			return (line);
-
 		}
-		// save = find + 1;
-		// printf ("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜テスト2〜〜〜〜〜〜〜〜〜\n%s\n",save);
-
 		
 		if (ft_strchr(memo,'\n')== 0)
 		{
-			// printf("~~~~~~~~~~~~~~~~~~~~~改行なし~~~~~~~~~~\n");
-
-			// if (*save == 0 )
-			// 	save = &memo[0];
 			
 			temp = malloc(sizeof(char) * BUFFER_SIZE + 1);
 			temp = memo;
 			save = ft_strjoin(save,temp);
 			temp = 0;
-			
-			// printf ("%s\n",memo);
-			// printf ("変更後%s\n",save);
-
-			// printf ("%p",save);
-			// for (int i = 0; i < BUFFER_SIZE ; i++)
-			i++;
-			// printf("%d回目\n",i);
-			// printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-			// printf ("最後%s\n",save);
 		}
 		
-
+		free(memo);
 		read_byte = read(fd,memo, BUFFER_SIZE);
-		// printf("~~~~~~~~~~~~再読み込み~~~~~~~~~~~~~~~~~~~\n");
-
-
-
-
 	}
 	
-	// temp = malloc(sizeof(char) * (ft_strlen(save) + ft_strlen(memo) + 1));
-	// temp = memo;
-	// save = ft_strjoin(save,memo);
-	if (read_byte == 0)
-		printf("%s\n",save);	
-	printf ("000\n");
-
+	if (read_byte == 0 && ((save[0] != 0)))
+		{
+			line = ft_strdup(save);
+			save[0] = 0; 
+			return (line);
+		}
+	// if (read_byte == 0 && (save))
+	// line = ft_strdup(save);
+	// return (line);
+	// 	printf("%s",save);
+	// {
+	// 	printf("-----------%s\n",save);	
+	// printf("~~~~~~~~~~~~^%s\n",line);
+	// save[0] = 0;
+	// 	return (line);
+	// }
+	// return (line);
 	return (NULL);
 }
 
@@ -147,7 +130,6 @@ int main()
 	//open("text.txt", O_RDONLY);
 	check = 1;
     fd1 = 0;
-	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
    
     // ファイルのオープン
 	fd1 = open("test.txt", O_RDONLY);

@@ -19,7 +19,6 @@ int get_next_line(int fd, char **line)
 	if (!memo)
 		return (0);
 	
-	// printf("~~~~~~~~~~~~~~~~~~~~~test1~~~~~~~~~~\n");
 	read_byte = read(fd,memo, BUFFER_SIZE);
 	i = 0;
 
@@ -34,7 +33,6 @@ int get_next_line(int fd, char **line)
 		find = ft_strchr(memo, '\n');
 		if (save == 0)
 			save = &memo[0];
-		// printf("%s", find);
 		printf ("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜テスト１〜〜〜〜〜〜〜〜〜\n%s\n",save);
 
 		while(ft_strchr(memo,'\n') != 0)
@@ -98,9 +96,7 @@ int get_next_line(int fd, char **line)
 
 	}
 	
-	// temp = malloc(sizeof(char) * (ft_strlen(save) + ft_strlen(memo) + 1));
-	// temp = memo;
-	// save = ft_strjoin(save,memo);
+	
 	if (read_byte == 0)
 		printf("%s\n",save);	
 	printf ("000\n");
