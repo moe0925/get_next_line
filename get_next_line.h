@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/23 17:51:41 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/24 21:26:12 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,16 @@
 //------------------------------------------------
 //  プロトタイプ宣言(Prototype declaration)
 //------------------------------------------------
-int get_next_line(int fd, char **line);
+char *get_next_line(int fd);
 
 char	*ft_strjoin(char const *s1, char const *s2);
 
 size_t	ft_strlen(const char *s);
 
 char	*ft_strchr(const char *s, int c);
+
+void	*ft_calloc(size_t count, size_t size);
+
+void	ft_bzero(void *s, size_t n);
 
 #endif

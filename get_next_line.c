@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/24 08:28:52 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/25 09:57:06 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@
 #include<sys/stat.h>
 #include<fcntl.h>
 
-
-
-
-int get_next_line(int fd, char **line)
+char *get_next_line(int fd)
 {
 	int read_byte;
 	char *memo;
@@ -33,9 +30,8 @@ int get_next_line(int fd, char **line)
 	save = malloc (sizeof(char) * 1);
 	save[0] = 0;
 	BUFFER_SIZE = 5;
-	char *line2;
-	line2 = *line;
 	char *temp;
+	char *line;
 	int j;
 	j = 0;
 	
@@ -71,15 +67,16 @@ int get_next_line(int fd, char **line)
 			// printf("%s\n",save);
 			// printf("%s\n",memo);
 
-			line2 = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(memo)) + 1));
-			line2 = ft_strjoin(save,memo);
+			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(memo)) + 1));
+			line = ft_strjoin(save,memo);
 			// printf ("%s",ft_strjoin(save,memo));
-			printf ("%s\n",line2);
+			printf ("%s\n",line);
 			save[0] = 0;
 			memo = find +1 ;
 			printf("現時点でのsave");
 			printf("%s\n", save);
-			printf("line: %s\n",line2);
+			printf("line: %s\n",line);
+			return (line);
 
 
 		}
@@ -129,9 +126,8 @@ int get_next_line(int fd, char **line)
 	if (read_byte == 0)
 		printf("%s\n",save);	
 	printf ("000\n");
-	return (0);
 
-	return (0);
+	return (NULL);
 }
 
 
@@ -157,8 +153,7 @@ int main()
 	}
 	// byte_num = read(fd1, &buf[0], 5);
     // ファイルから5バイト読み込み
-	char **line;
-	get_next_line(fd1, line);
+	get_next_line(fd1);
 
    
     // ファイルを閉じる

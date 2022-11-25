@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/23 18:57:11 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/24 21:23:51 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,33 @@ char	*ft_strchr(const char *s, int c)
 			i++;
 	}
 	return (NULL);
+}
+
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+
+	if (size != 0 && count > SIZE_MAX / size)
+		return (NULL);
+	p = malloc(count * size);
+	if (!p)
+		return (NULL);
+	ft_bzero(p, count * size);
+	return (p);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*str;
+	size_t			i;
+
+	str = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		str[i] = 0;
+		i++;
+	}
+	return ;
 }
