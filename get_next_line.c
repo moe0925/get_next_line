@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/25 09:57:06 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/25 09:59:58 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,12 @@ int main()
 // 変数定義
     int fd1;
     // char buf[BUF_SIZE];
+ 	char *line;
+	int  check;
 
+	line = "";
+	//open("text.txt", O_RDONLY);
+	check = 1;
     fd1 = 0;
 	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
    
@@ -153,8 +158,14 @@ int main()
 	}
 	// byte_num = read(fd1, &buf[0], 5);
     // ファイルから5バイト読み込み
-	get_next_line(fd1);
-
+	while (line)
+	{
+	line = get_next_line(fd1);
+	printf("> %s", line);
+	check++;
+	free(line);
+	}
+	system("leaks a.out");
    
     // ファイルを閉じる
     close(fd1);
