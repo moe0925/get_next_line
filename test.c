@@ -5,75 +5,152 @@
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<fcntl.h>
+#include "get_next_line.h"
+
+
+int BUFFER_SIZE = 5;
 
 
 
-
-int get_next_line(int fd)
+int check(char *str)
 {
-	int BUFFER_SIZE;
-	int	flag;
-	char *buf1;
-	char *line;
+	int i;
+
+	i = 0;
+	while(str[i] != '\0')
+	{
+		if (str[i] == '\n')
+			return (i);
+	}
+	return (i);
+}
+
+char *malloc_free(char *line)
+{
+	int i;
+	i = 0;
+	while (!(line))
+	{
+		free(line);
+		i++;
+	}
+	line = ft_calloc(1,sizeof(char));
+	return (line);
+}
+
+char *get_next_line(int fd)
+{
+	int read_byte;
+	char *memo;
 	static char *save;
-	int	i;
-    char *memo;
+	char *temp;
+	char *line;
+	char *temp1;
+	int find;
 
-	flag = 0;
-	BUFFER_SIZE = 4;
-	if (flag == -1)
+	
+	if (!save)
+		save = ft_calloc(1,sizeof(char));
+
+	memo = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!memo)
+		return (malloc_free(memo));
+	read_byte = read(fd,memo, BUFFER_SIZE);
+
+	if (read_byte < 0)
 		return (0);
-	save = malloc(sizeof(char) * 1);
-	save[0] = 0;
-	read(fd, memo, BUFFER_SIZE);
-    char *test1 = memo;
-    printf("%c\n", test1[0]);
-    
+
+	while (read_byte > 0)
+	{
+		memo[BUFFER_SIZE + 1] = 0;
 	
 
-	// while (//ファイルの読み込みが終わるまで)
+		if (save == 0)
+			save = &memo[0];
+
+		while(check(memo) != 0 || memo[0] == '\n')
+		{
+			find = check(memo);
+			
+			temp1 = malloc(sizeof(char) * (find + 1));
+			ft_strlcpy(temp1,memo, (find + 1));
+			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(temp1)) + 1));
+			free(temp1);
+			line = ft_strjoin(save,temp1);
+			save[0] = 0;
+			save = &memo[find + 1] ;
+			return (line);
+		}
+		
+		if (check(memo)== 0 && memo[0] != '\n')
+		{
+			
+			temp = malloc(sizeof(char) * BUFFER_SIZE + 1);
+			temp = memo;
+			save = ft_strjoin(save,temp);
+			temp = 0;
+		}
+		
+		free(memo);
+		read_byte = read(fd,memo, BUFFER_SIZE);
+	}
+	
+	if (read_byte == 0 && ((save[0] != 0)))
+		{
+			line = ft_strdup(save);
+			save[0] = 0; 
+			return (line);
+		}
+	// if (read_byte == 0 && (save))
+	// line = ft_strdup(save);
+	// return (line);
+	// 	printf("%s",save);
 	// {
-	// buf1 = malloc (sizeof(char) * BUFFER_SIZE + 1);
-	// if (!buf1)
-	// 	return (0);
-	
-	// flag = read(fd,buf1, BUFFER_SIZE);
-	// if (flag < 0)
-	// 	return 0;
-
-
-
-
+	// 	printf("-----------%s\n",save);	
+	// printf("~~~~~~~~~~~~^%s\n",line);
+	// save[0] = 0;
+	// 	return (line);
 	// }
-	
-	
-	// // {
-
-	// // }
-	// for (int i = 0;i<1;i++)
-	
-	// save = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	return (0);
+	// return (line);
+	return (NULL);
 }
 
 
-int main(void)
+
+
+
+
+int main()
 {
-    // 変数定義
+// 変数定義
     int fd1;
     // char buf[BUF_SIZE];
+ 	char *line;
+	int  check;
 
+	line = "";
+	//open("text.txt", O_RDONLY);
+	check = 1;
+    fd1 = 0;
    
     // ファイルのオープン
 	fd1 = open("test.txt", O_RDONLY);
-	// if (fd1 == -1)
-	// {
-	// 		printf("ファイルオープンエラー\n");
-	// 		return 0;
-	// }
+	if (fd1 == -1)
+	{
+			printf("ファイルオープンエラー\n");
+			return 0;
+	}
 	// byte_num = read(fd1, &buf[0], 5);
     // ファイルから5バイト読み込み
-	get_next_line(fd1);
+	while (line)
+	{
+	line = get_next_line(fd1);
+	printf("> %s\n", line);
+	check++;
+	free(line);
+	}
+	system("leaks a.out");
+   
     // ファイルを閉じる
     close(fd1);
     return 0;

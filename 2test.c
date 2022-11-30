@@ -110,29 +110,26 @@ int get_next_line(int fd, char **line)
 
 
 
-int main()
+
+int  BUFFER_SIZE = 1000;
+
+int main(void)
 {
-// 変数定義
-    int fd1;
-    // char buf[BUF_SIZE];
+ int  fd;
+ char *line;
+ int  check;
 
-    fd1 = 0;
-	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-   
-    // ファイルのオープン
-	fd1 = open("test.txt", O_RDONLY);
-	if (fd1 == -1)
-	{
-			printf("ファイルオープンエラー\n");
-			return 0;
-	}
-	// byte_num = read(fd1, &buf[0], 5);
-    // ファイルから5バイト読み込み
-	char **line;
-	get_next_line(fd1, line);
-
-   
-    // ファイルを閉じる
-    close(fd1);
-    return 0;
+ line = "";
+ fd = 1000;
+ //open("text.txt", O_RDONLY);
+ check = 1;
+ while (line)
+ {
+  line = get_next_line(fd);
+  printf("> %s", line);
+  check++;
+  free(line);
+ }
+ system("leaks a.out");
+ return (0);
 }

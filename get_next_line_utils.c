@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/25 12:32:06 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/30 20:27:47 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,31 +65,6 @@ size_t	ft_strlen(const char *s)
 		i++;
 	}
 	return (i);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	*s2;
-
-	s2 = (char *)s;
-	i = 0;
-	if (c == 0)
-	{
-		while (s2[i] != '\0')
-		{
-			i++;
-		}
-		return (&s2[i]);
-	}
-	while (s2[i] != '\0')
-	{
-		if (s2[i] == (char)c)
-			return (&s2[i]);
-		else
-			i++;
-	}
-	return (NULL);
 }
 
 
@@ -151,4 +126,28 @@ static char	*ft_strcpy(char *dest, char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+	size_t	up;
+	size_t	len;
+
+	len = ft_strlen(src);
+	up = 0;
+	if (dstsize == 0)
+		return (len);
+	else if (dstsize - 1 > len)
+		up = len;
+	else
+		up = dstsize - 1 ;
+	i = 0;
+	while (i < up)
+	{	
+		dst[i] = src[i];
+		i++;
+	}
+	dst[up] = '\0';
+	return (len);
 }

@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/25 12:32:12 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/30 18:58:34 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *s, size_t n);
 
 char	*ft_strdup(const char *src);
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 
 #endif
