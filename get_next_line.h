@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/11/30 18:58:34 by moeota           ###   ########.fr       */
+/*   Updated: 2022/11/30 23:54:46 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 //------------------------------------------------
 //  プロトタイプ宣言(Prototype declaration)
 //------------------------------------------------
-char *get_next_line(int fd);
+char    *get_next_line(int fd);
 
 char	*ft_strjoin(char const *s1, char const *s2);
 
