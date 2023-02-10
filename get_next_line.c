@@ -18,6 +18,7 @@ char *make_line(char *memo,char *save)
 	int find;
 	char *temp1;
 	char *line;
+
 	find = check(memo);
 	temp1 = malloc(sizeof(char) * (find + 1));
 	// system("leaks a.out");
@@ -27,9 +28,19 @@ char *make_line(char *memo,char *save)
 		return (NULL);
 	line = ft_strjoin(save,temp1);
 	free(temp1);
-	free(save);
-	save = malloc(sizeof(char) * (BUFFER_SIZE - find - 1));
+	// free(save);
+	return (line);
+
+}
+
+char *make_save(char *memo,char *save)
+{
 	int i;
+	int find;
+
+	find = check(memo);
+	save = malloc(sizeof(char) * (BUFFER_SIZE - find - 1));
+
 	i = 0;
 	while (memo[find + i + 1] != '\0')
 	{
@@ -38,11 +49,8 @@ char *make_line(char *memo,char *save)
 	}
 	save[i] = '\0';
 	free(memo);//いる
-	return (line);
-
+	return (save);
 }
-
-
 
 int check(char *str)
 {
@@ -79,21 +87,26 @@ char *get_next_line(int fd)
 	char *temp1;
 	static char *save;
 
-	printf("readbyte:%d\n",read_byte);
-	printf("memo:%s\n",memo);
+	// printf("readbyte:%d\n",read_byte);
+	// printf("memo:%s\n",memo);
 	// if (read_byte < 0)
 	// {
 	// 	free(save);
 	// 	return (NULL);
 	// }
-	printf("check:%d\n",check(memo));
+	// printf("check:%d\n",check(memo));
 
 	read_byte = 1;
 
 	while (read_byte != 0)
 	{
+	// system("leaks a.out");
+
 		if (!save)
 			save = ft_calloc(1,sizeof(char));
+
+		printf("pointer,save:%p\n",save);
+		printf("save:%s\n",save);
 
 		memo = ft_calloc(BUFFER_SIZE+ 1, sizeof(char));
 		if (!memo)
@@ -104,16 +117,22 @@ char *get_next_line(int fd)
 
 		read_byte = read(fd, memo, BUFFER_SIZE);
 
-		// if (read_byte < 0)
-		// {
-		// 	free(save);
-		// 	free(memo);
-		// 	return(NULL);
-		// }
-
-		if (check(memo) > 0/* || memo[0] == '\0' */)
+		if (read_byte < 0)
 		{
-			return((make_line(memo,save)));
+			// free(save);
+			free(memo);
+			return(NULL);
+		}
+
+		if (check(memo) > 0|| memo[0] == '\n')
+		{
+			line = ((make_line(memo,save)));
+			// free(save);
+			
+			save = (make_save(memo,save));
+	system("leaks a.out");
+
+			return (line);
 		}
 		else if (check(memo) == 0)
 		{
@@ -130,9 +149,8 @@ char *get_next_line(int fd)
 			free(memo);
 			save = ft_strjoin(save,temp1);
 			free(temp1);
-			printf("save:%s\n",save);
+			// printf("save:%s\n",save);
 		}
-
 	}
 	// if  (read_byte > 0)
 	// {
@@ -154,8 +172,16 @@ char *get_next_line(int fd)
 	// // free(save);
 	// if (read_byte == 0)
 	// 	return (save);
-	printf("readbyte:%d\n",read_byte);
+	// printf("readbyte:%d\n",read_byte);
 	// free(save);
+	// system("leaks a.out");
+	// if (save)
+	// {
+	// 	return (save);
+	// }
+	printf("final_save:%p",save);
+	free(save);
+	
 	return (NULL);
 }
 
@@ -190,10 +216,11 @@ int main()
 	check++;
 	free(line);
 	}
+	// system("leaks a.out");
+
    
     // ファイルを閉じる
     close(fd1);
-	// system("leaks a.out");
 
     return 0;
 }

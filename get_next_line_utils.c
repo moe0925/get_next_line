@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2022/12/16 14:43:31 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/10 15:52:01 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static char	*join1(char *ss1, char *ss2, char *p)
 
 	}
 	p[i + j] = 0;
+	free(ss1);
 	return (p);
 }
 
@@ -96,7 +97,32 @@ void	ft_bzero(void *s, size_t n)
 	return ;
 }
 
-static char	*ft_strcpy(char *dest, char *src);
+char	*ft_strcpy(char *dest, char *src);
+
+char	*ft_strchr(const char *s, int c)
+{
+	int		i;
+	char	*s2;
+
+	while (c > 256)
+		c = c % 256;
+	s2 = (char *)s;
+	i = 0;
+	if (c == 0)
+	{
+		while (s2[i] != '\0')
+			i++;
+		return (&(s2[i]));
+	}
+	while (s2[i] != '\0')
+	{
+		if (s2[i] == (char)c)
+			return (&s2[i]);
+		else
+			i++;
+	}
+	return (NULL);
+}
 
 char	*ft_strdup(const char *src)
 {
@@ -114,7 +140,7 @@ char	*ft_strdup(const char *src)
 	return (p);
 }
 
-static char	*ft_strcpy(char *dest, char *src)
+char	*ft_strcpy(char *dest, char *src)
 {
 	int	i;
 
@@ -149,5 +175,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		i++;
 	}
 	dst[up] = '\0';
+	printf("%s",dst);
 	return (len);
 }
