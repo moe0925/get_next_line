@@ -23,74 +23,117 @@ int check(char *str)
 	return (-1);
 }
 
-char *make_memo(int fd)
+char *make_memo(int fd, char *save)
 {
     int read_byte;
 	char *memo;
+
     memo = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     memo[BUFFER_SIZE + 1] = 0;
 	if (!memo)
 		return (NULL);
+
+    if (!save)
+    {
+        save = malloc(sizeof(char) * 1);
+	    save[0] = 0;
+    }
 	
-	read_byte = read(fd,memo,BUFFER_SIZE);
+    read_byte = 1;
+	while  ((read_byte > 0 && check(memo) == -1) )
+	{
+	    read_byte = read(fd,memo,BUFFER_SIZE);
+        save = ft_strjoin(save,memo);
+
+    }
     if (read_byte < 0)
         return (NULL);
-    return (memo);
+   
+    return (save);
 }
 
-char *read_memo(int fd)
+char *read_memo(char *save)
 {
-    char *memo;
+    int find;
+    char *line;
+    int j;
+
+    j = 0;
+    if (!save[0])
+		return (NULL);
+	find = check(save);
+    if (find == -1 && (save))
+    {
+        line = malloc(sizeof(char) * ft_strlen(save) + 1);
+        while(j < ft_strlen(save))
+        {
+            line[j] = save[j];
+            j++;
+        }
+        line[j] = 0;
+        return (line);
+    }
+    // else if ((save[0] = 0))
+    //     return (NULL);
+    line = malloc(sizeof(char) * (find + 2));
+    if (!line)
+    {
+        return (NULL);
+    }
+    
+    while(j < find)
+    {
+        line[j] = save[j];
+        j++;
+    }
+    line[j] = 0;
+    // printf("line:%s\n",line);
+    // printf("save:%s\n",save);
+    return (line);
+}
+
+char *make_save(char *save)
+{
+    int find;
+    int i;
+    char *save_new;
+    // printf("save:%s\n",save);
+
+    find = check(save);
+    i = 0;
+
+    if (find == -1)
+	{
+		free(save);
+		return (NULL);
+	}
+    save_new = malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
+    if (!save_new)
+        return (NULL);
+    
+    while (save[find + i + 1] != 0)
+    {
+        save_new[i] = save[find + i + 1];
+        i++;
+    }
+    save_new[i] = 0;
+    // printf("save:%s\n",save);
+    return (save_new);
+}
+    
+char *get_next_line(int fd)
+{
     static char *save;
     char *line;
-    while(make_memo(fd))
-    {
-        int find;
-        char *temp;
-
-        memo = make_memo(fd);
-        if(check(memo)== -1)
-        {
-        save = ft_strjoin(save,memo);
-        free(memo);
-        }
-        if (check(memo) > 0)
-        {
-
-            find = check(temp);
-            temp = malloc(sizeof(char) * (find + 2));
-            int j;
-            j = 0;
-            
-            while(j < find)
-            {
-                temp[j] = memo[j];
-                j++;
-            }
-            temp[j] = 0;
-
-            // ft_strlcpy(temp,memo,find+1);
-            printf("temp:%s",temp);
-            printf("hi");
-			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(temp)) + 1));
-			line = ft_strjoin(save,memo);
-            int i;
-            i = 0;
-            save = malloc(sizeof(char) * (BUFFER_SIZE - find));
-            while (memo[find + i + 1] != 0 )
-            {
-                save[i] = memo[find + i + 1];
-                i++;
-            }
-            save[i] = 0;
-            free(memo);
-            printf("save;%s\n",save);
-            return (line);
-        }
-    }
-    return (NULL);
-    
+    save = make_memo(fd, save);
+    if (!save)
+        return (NULL);
+    line = read_memo(save);
+    save = make_save(save);
+    // printf("save:%s\n",save);
+    return (line);
 }
+
 
 int main(void)
 {
@@ -106,13 +149,16 @@ int main(void)
 			return 0;
 	}
     check = 1;
+
     while (line)
     {
-    // line = get_next_line(fd);
-    line = read_memo(fd);
+    // for (int i = 1;i < 8;i++)
+    line = get_next_line(fd);
     printf("> %s", line);
     check++;
     free(line);
+
+
     }
     // system("leaks a.out");
     return (0);

@@ -65,7 +65,7 @@ char *get_next_line(int fd)
         
        
         
-		if (find >= 0)
+		while (find >= 0)
 		{
             temp = malloc(sizeof(char) * (find + 2));
             int j;
@@ -79,9 +79,11 @@ char *get_next_line(int fd)
             temp[j] = 0;
 
             // ft_strlcpy(temp,memo,find+1);
-            // printf("temp:%s\n",temp);
+            printf("temp:%s\n",temp);
 			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(temp)) + 1));
-			line = ft_strjoin(save,memo);
+            printf("save;%s\n------------\n",save);
+            printf("memo;%s\n------------\n",memo);
+			line = ft_strjoin(save,temp);
             int i;
             i = 0;
             save = malloc(sizeof(char) * (BUFFER_SIZE - find));
@@ -91,36 +93,31 @@ char *get_next_line(int fd)
                 i++;
             }
             save[i] = 0;
-            // printf("save;%s\n",save);
+            printf("line;%s\n----------\n",line);
+            // free(memo);
             return (line);
 		}
 
-        else if (find == -1)
+        if (find == -1)
         {
+            // free(memo);
             save = ft_strjoin(save,memo);
+            printf("save;%s\n------------\n",save);
+            printf("memo;%s\n------------\n",memo);
+            free(memo);
         }
 
-        free(memo);
-       
-       
-		
 	}
     if (read_byte == 0)
     {
-        // printf("%s\n",memo);
+        printf("read_byte0:%s\n",save);
+        printf("hi");
         line = ft_strjoin(save,memo);
+        printf("%s", line);
         free(memo);
         return (line);
     }
-		
-
-		// read_byte = read(fd,memo, BUFFER_SIZE);
-		// printf("~~~~~~~~~~~~再読み込み~~~~~~~~~~~~~~~~~~~\n");
-
 	return (NULL);
-
-
-
 	}
 	
 	
@@ -149,7 +146,7 @@ int main(void)
     while (line)
     {
     line = get_next_line(fd);
-    printf("> %s\n", line);
+    printf(">%d回目の出力 %s\n~~~~~~~~~~~~~~~~~~\n", check,line);
     check++;
     free(line);
     }
