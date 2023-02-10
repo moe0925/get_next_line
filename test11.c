@@ -43,12 +43,26 @@ char *make_memo(int fd, char *save)
 	while  ((read_byte > 0 && check(memo) == -1) )
 	{
 	    read_byte = read(fd,memo,BUFFER_SIZE);
-        save = ft_strjoin(save,memo);
+        printf("readbyte:%d\n",read_byte);
+        printf("memo:%s\n",memo);
+        if (read_byte!= 0)
+            save = ft_strjoin(save,memo);
+        printf("save:%s\n",save);
+    }
+    // if (read_byte == 0)
+    //     free(memo);
+    if (read_byte < 0)
+    {
+        free(memo);
+        return (NULL);
 
     }
-    if (read_byte < 0)
-        return (NULL);
-   
+    // if (read_byte == 0)
+    // {
+    //     free(save);
+    //     return (NULL);
+    // }
+    free(memo);
     return (save);
 }
 
@@ -117,7 +131,8 @@ char *make_save(char *save)
         i++;
     }
     save_new[i] = 0;
-    // printf("save:%s\n",save);
+    printf("savenew-----:%s\n",save_new);
+    free(save);
     return (save_new);
 }
     
