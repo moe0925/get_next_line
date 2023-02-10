@@ -23,50 +23,41 @@ int check(char *str)
 	return (-1);
 }
 
-char *get_next_line(int fd)
+char *make_memo(int fd)
 {
-	int read_byte;
+    int read_byte;
 	char *memo;
-    char *line;
-	static char *save;
-    char *temp;
-
-    if (!save)
-    {
-        save = malloc(sizeof(char) * 1);
-	    save[0] = 0;
-    }
-	
-	memo = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    memo = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     memo[BUFFER_SIZE + 1] = 0;
 	if (!memo)
 		return (NULL);
 	
-    // printf("memo;%s\n",memo);
+	read_byte = read(fd,memo,BUFFER_SIZE);
+    if (read_byte < 0)
+        return (NULL);
+    return (memo);
+}
 
-    // printf("%d",read_byte);
+char *read_memo(int fd)
+{
+    char *memo;
+    static char *save;
+    char *line;
+    while(make_memo(fd))
+    {
+        int find;
+        char *temp;
 
-    // while ()
-	if (read_byte < 0)
-		return (NULL);
+        memo = make_memo(fd);
+        if(check(memo)== -1)
+        {
+        save = ft_strjoin(save,memo);
+        free(memo);
+        }
+        if (check(memo) > 0)
+        {
 
-
-    read_byte = 1;
-	while  (read_byte > 0)
-	{
-	    read_byte = read(fd,memo,BUFFER_SIZE);
-
-		// memo[BUFFER_SIZE + 1] = 0;
-		int find;
-		find = check(memo);
-		
-		// printf ("〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜テスト１〜〜〜〜〜〜〜〜〜\n");
-        // printf("%d\n",find);
-        
-       
-        
-		if (find >= 0)
-		{
+            find = check(temp);
             temp = malloc(sizeof(char) * (find + 2));
             int j;
             j = 0;
@@ -79,7 +70,8 @@ char *get_next_line(int fd)
             temp[j] = 0;
 
             // ft_strlcpy(temp,memo,find+1);
-            // printf("temp:%s\n",temp);
+            printf("temp:%s",temp);
+            printf("hi");
 			line = (char *)malloc((sizeof(char))*((ft_strlen(save)) + (ft_strlen(temp)) + 1));
 			line = ft_strjoin(save,memo);
             int i;
@@ -91,46 +83,14 @@ char *get_next_line(int fd)
                 i++;
             }
             save[i] = 0;
-            // printf("save;%s\n",save);
+            free(memo);
+            printf("save;%s\n",save);
             return (line);
-		}
-
-        else if (find == -1)
-        {
-            save = ft_strjoin(save,memo);
         }
-
-        free(memo);
-       
-       
-		
-	}
-    if (read_byte == 0)
-    {
-        // printf("%s\n",memo);
-        line = ft_strjoin(save,memo);
-        free(memo);
-        return (line);
     }
-		
-
-		// read_byte = read(fd,memo, BUFFER_SIZE);
-		// printf("~~~~~~~~~~~~再読み込み~~~~~~~~~~~~~~~~~~~\n");
-
-	return (NULL);
-
-
-
-	}
-	
-	
-	// if (read_byte == 0)
-	// 	printf("%s\n",save);	
-	// printf ("000\n");
-	// return (0);
-
-
-//  int  BUFFER_SIZE = 1000;
+    return (NULL);
+    
+}
 
 int main(void)
 {
@@ -148,11 +108,13 @@ int main(void)
     check = 1;
     while (line)
     {
-    line = get_next_line(fd);
-    printf("> %s\n", line);
+    // line = get_next_line(fd);
+    line = read_memo(fd);
+    printf("> %s", line);
     check++;
     free(line);
     }
     // system("leaks a.out");
     return (0);
 }
+
