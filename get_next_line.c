@@ -7,8 +7,6 @@
 #include<fcntl.h>
 #include "get_next_line.h"
 
-// int BUFFER_SIZE = 1;
-
 int check(char *str)
 {
 	int i;
@@ -29,25 +27,29 @@ char *make_memo(int fd, char *save)
 	char *memo;
 
     memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-    memo[BUFFER_SIZE] = 0;
 	if (!memo)
 		return (NULL);
-
+    memo[BUFFER_SIZE] = 0;
     if (!save)
     {
         save = (char *)malloc(sizeof(char) * 1);
+        if (!save)
+            return NULL;
 	    save[0] = 0;
     }
-	
-    read_byte = 1;
-	while  ((read_byte > 0 && check(memo) == -1) )
+	while  (1)
 	{
 	    read_byte = read(fd,memo,BUFFER_SIZE);
+        if (read_byte == -1)
+            break ;
         // printf("readbyte:%d\n",read_byte);
         // printf("memo:%s\n",memo);
         memo[read_byte] = 0;
         if (read_byte!= 0)
             save = ft_strjoin(save,memo);
+        if (check(memo) != -1 || read_byte == 0)
+            break ;
+            // save = NULL;
         // printf("save:%s\n",save);
     }
     // if (read_byte == 0)
@@ -82,6 +84,8 @@ char *read_memo(char *save)
     if (find == -1 && (save))
     {
         line = (char *)malloc(sizeof(char) * ft_strlen(save) + 1);
+        if (!line)
+            return NULL;
         while(j < (int)ft_strlen(save))
         {
             line[j] = save[j];
@@ -170,7 +174,7 @@ char *get_next_line(int fd)
 //     int  fd;
 //     char *line;
 //     int  check;
-
+//
 //     line = "";
 //     fd = open("text.txt", O_RDONLY);
 //     if (fd == -1)
@@ -179,18 +183,17 @@ char *get_next_line(int fd)
 // 			return 0;
 // 	}
 //     check = 1;
-
+//
 //     while (line)
 //     {
-//     // for (int i = 1;i < 8;i++)
 //     line = get_next_line(fd);
 //     printf("> %s", line);
 //     check++;
 //     free(line);
-
-
+//
+//
 //     }
-//     // system("leaks a.out");
+//    //  system("leaks a.out");
 //     return (0);
 // }
 

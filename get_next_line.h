@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
+/*   By: yshimoda <yshimoda@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/10 13:19:39 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/11 21:07:57 by yshimoda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <unistd.h>
 # include <string.h>
 #include <stdio.h>
+
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 1
+#endif
 //------------------------------------------------
 //  マクロ定義(Macro definition)
 //------------------------------------------------
