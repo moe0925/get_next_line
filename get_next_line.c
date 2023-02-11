@@ -7,7 +7,7 @@
 #include<fcntl.h>
 #include "get_next_line.h"
 
-int BUFFER_SIZE = 5;
+// int BUFFER_SIZE = 1;
 
 int check(char *str)
 {
@@ -29,7 +29,7 @@ char *make_memo(int fd, char *save)
 	char *memo;
 
     memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-    memo[BUFFER_SIZE + 1] = 0;
+    memo[BUFFER_SIZE] = 0;
 	if (!memo)
 		return (NULL);
 
@@ -45,12 +45,15 @@ char *make_memo(int fd, char *save)
 	    read_byte = read(fd,memo,BUFFER_SIZE);
         // printf("readbyte:%d\n",read_byte);
         // printf("memo:%s\n",memo);
+        memo[read_byte] = 0;
         if (read_byte!= 0)
             save = ft_strjoin(save,memo);
         // printf("save:%s\n",save);
     }
     // if (read_byte == 0)
-    //     free(memo);
+    // {
+    //     return (NULL);
+    // }
     if (read_byte < 0)
     {
         free(memo);
@@ -79,7 +82,7 @@ char *read_memo(char *save)
     if (find == -1 && (save))
     {
         line = (char *)malloc(sizeof(char) * ft_strlen(save) + 1);
-        while(j < ft_strlen(save))
+        while(j < (int)ft_strlen(save))
         {
             line[j] = save[j];
             j++;
@@ -95,7 +98,7 @@ char *read_memo(char *save)
         return (NULL);
     }
     
-    while(j < find)
+    while(j <= find)
     {
         line[j] = save[j];
         j++;
@@ -116,11 +119,17 @@ char *make_save(char *save)
     find = check(save);
     i = 0;
 
+    // if(find == -1 && save[0] == 0)
+    // {
+
+    // }
     if (find == -1)
 	{
 		free(save);
+        // printf("hi");
 		return (NULL);
 	}
+
     save_new = (char *)malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
     if (!save_new)
         return (NULL);
@@ -140,42 +149,48 @@ char *get_next_line(int fd)
 {
     static char *save;
     char *line;
+
+    if (fd < 0 || BUFFER_SIZE <= 0)
+        return (NULL);
+
     save = make_memo(fd, save);
+    // printf("save:%s\n",save);
+    
     if (!save)
         return (NULL);
     line = read_memo(save);
     save = make_save(save);
-    // printf("save:%s\n",save);
+    // printf("save:%s\n",save);ç
     return (line);
 }
 
 
-int main(void)
-{
-    int  fd;
-    char *line;
-    int  check;
+// int main(void)
+// {
+//     int  fd;
+//     char *line;
+//     int  check;
 
-    line = "";
-    fd = open("text.txt", O_RDONLY);
-    if (fd == -1)
-	{
-			printf("ファイルオープンエラー\n");
-			return 0;
-	}
-    check = 1;
+//     line = "";
+//     fd = open("text.txt", O_RDONLY);
+//     if (fd == -1)
+// 	{
+// 			printf("ファイルオープンエラー\n");
+// 			return 0;
+// 	}
+//     check = 1;
 
-    while (line)
-    {
-    // for (int i = 1;i < 8;i++)
-    line = get_next_line(fd);
-    printf("> %s", line);
-    check++;
-    free(line);
+//     while (line)
+//     {
+//     // for (int i = 1;i < 8;i++)
+//     line = get_next_line(fd);
+//     printf("> %s", line);
+//     check++;
+//     free(line);
 
 
-    }
-    // system("leaks a.out");
-    return (0);
-}
+//     }
+//     // system("leaks a.out");
+//     return (0);
+// }
 
