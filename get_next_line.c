@@ -41,7 +41,9 @@ char *make_memo(int fd, char *save)
 	{
 	    read_byte = read(fd,memo,BUFFER_SIZE);
         if (read_byte == -1)
+        {
             break ;
+        }
         // printf("readbyte:%d\n",read_byte);
         // printf("memo:%s\n",memo);
         memo[read_byte] = 0;
@@ -64,7 +66,6 @@ char *make_memo(int fd, char *save)
     }
     // if (read_byte == 0)
     // {
-    //     free(save);
     //     return (NULL);
     // }
     free(memo);
@@ -155,13 +156,18 @@ char *get_next_line(int fd)
     char *line;
 
     if (fd < 0 || BUFFER_SIZE <= 0)
+    {
         return (NULL);
+    }
 
     save = make_memo(fd, save);
     // printf("save:%s\n",save);
     
     if (!save)
+    {
         return (NULL);
+
+    }
     line = read_memo(save);
     save = make_save(save);
     // printf("save:%s\n",save);ç
@@ -169,31 +175,34 @@ char *get_next_line(int fd)
 }
 
 
-// int main(void)
-// {
-//     int  fd;
-//     char *line;
-//     int  check;
-//
-//     line = "";
-//     fd = open("text.txt", O_RDONLY);
-//     if (fd == -1)
-// 	{
-// 			printf("ファイルオープンエラー\n");
-// 			return 0;
-// 	}
-//     check = 1;
-//
-//     while (line)
-//     {
-//     line = get_next_line(fd);
-//     printf("> %s", line);
-//     check++;
-//     free(line);
-//
-//
-//     }
-//    //  system("leaks a.out");
-//     return (0);
-// }
+int main(void)
+{
+    int  fd;
+    char *line;
+    int  check;
+
+    line = "";
+    fd = open("text.txt", O_RDONLY);
+    // fd =1000;
+    // if (fd == -1)
+	// {
+	// 		printf("ファイルオープンエラー\n");
+	// 		return 0;
+	// }
+    check = 1;
+
+    while (line)
+    {
+    line = get_next_line(fd);
+        printf("fd:%d\n",fd);
+
+    printf("> %s", line);
+    check++;
+    free(line);
+
+
+    }
+    system("leaks a.out");
+    return (0);
+}
 
