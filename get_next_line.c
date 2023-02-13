@@ -55,9 +55,10 @@ char *make_memo(int fd, char *save)
         // printf("readbyte:%d\n",read_byte);
         // printf("memo:%s\n",memo);
         memo[read_byte] = '\0';
-        if (read_byte!= 0)
-        printf("testnew\n");
+        printf("%d", read_byte);
+        // if (read_byte != 0)
             save = ft_strjoin(save,memo);
+        // printf("testnew\n");
         if (check(memo) != -1 || read_byte == 0)
             break ;
             // save = NULL;
@@ -194,33 +195,33 @@ char *get_next_line(int fd)
 }
 
 
-int main(void)
-{
-    int  fd;
-    char *line;
-    int  check;
+// int main(void)
+// {
+//     int  fd;
+//     char *line;
+//     int  check;
 
-    line = "";
-    fd = open("text.txt", O_RDONLY);
-    // fd =1000;
-    if (fd == -1)
-	{
-			printf("ファイルオープンエラー\n");
-			return 0;
-	}
-    check = 1;
+//     line = "";
+//     fd = open("text.txt", O_RDONLY);
+//     // fd =1000;
+//     if (fd == -1)
+// 	{
+// 			printf("ファイルオープンエラー\n");
+// 			return 0;
+// 	}
+//     check = 1;
 
-    while (line)
-    {
-    line = get_next_line(fd);
+//     while (line)
+//     {
+//     line = get_next_line(fd);
 
-    printf("> %s", line);
-    check++;
-    free(line);
+//     printf("> %s", line);
+//     check++;
+//     free(line);
 
 
-    }
-    // system("leaks a.out");
-    return (0);
-}
+//     }
+//     // system("leaks a.out");
+//     return (0);
+// }
 
