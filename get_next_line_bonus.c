@@ -132,23 +132,23 @@ char *make_save(char *save)
     
 char *get_next_line(int fd)
 {
-    static char *save;
+    static char *save[257];
     char *line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
+    if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
     {
         return (NULL);
     }
 
-    save = make_memo(fd, save);
+    save[fd] = make_memo(fd, save[fd]);
     
-    if (!save)
+    if (!save[fd])
     {
         return (NULL);
 
     }
-    line = read_memo(save);
-    save = make_save(save);
+    line = read_memo(save[fd]);
+    save[fd] = make_save(save[fd]);
     return (line);
 }
 
