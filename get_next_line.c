@@ -13,9 +13,9 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int	check(char *str)
+static ssize_t	check(char *str)
 {
-	int	i;
+	ssize_t	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -27,11 +27,11 @@ int	check(char *str)
 	return (-1);
 }
 
-char	*make_memo(int fd, char *save)
+static char	*make_memo(int fd, char *save)
 {
-	int		read_byte;
-	char	*memo;
-	char	*tmp;
+	ssize_t		read_byte;
+	char		*memo;
+	char		*tmp;
 
 	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
 	if (!memo)
@@ -47,43 +47,30 @@ char	*make_memo(int fd, char *save)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
 		if (read_byte < 0)
-		{
-			free(memo);
-			free(save);
-			return (NULL);
-		}
+			return (free_func(&memo,&save));
 		memo[read_byte] = '\0';
 		tmp = ft_strjoin(save, memo);
 		if (!tmp)
-		{
-			free(memo);
-			free(save);
-			return (NULL);
-		}
+			return (free_func(&memo,&save));
 		free(save);
 		save = tmp;
-		// printf("readbyte;%d",read_byte);
-		// printf("check%d",check(memo));
-
 		if (check(memo) != -1 || read_byte == 0)
-		{
-			// printf("hi");
-			// printf("readbyte;%d",read_byte);
-			// printf("check;%d",read_byte);
 			break ;
-		}
 	}
 	free(memo);
 	return (save);
 }
 
-char	*read_memo(char *save)
+static char	*read_memo(char *save)
 {
-	int		find;
-	char	*line;
+	ssize_t		find;
+	char		*line;
 
 	if (!save[0])
+	{
+		free(save);
 		return (NULL);
+	}
 	find = check(save);
 	if (find == -1 && (save))
 	{
@@ -102,9 +89,9 @@ char	*read_memo(char *save)
 
 char	*make_save(char *save)
 {
-	int		find;
-	int		i;
-	char	*save_new;
+	ssize_t		find;
+	size_t		i;
+	char		*save_new;
 
 	find = check(save);
 	i = 0;
@@ -115,7 +102,10 @@ char	*make_save(char *save)
 	}
 	save_new = (char *)malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
 	if (!save_new)
+	{
+		free(save);
 		return (NULL);
+	}
 	while (save[find + i + 1] != '\0')
 	{
 		save_new[i] = save[find + i + 1];
@@ -137,12 +127,13 @@ char	*get_next_line(int fd)
 	if (!save)
 		return (NULL);
 	line = read_memo(save);
+	if (!line)
+		return (NULL);
 	save = make_save(save);
 	return (line);
 }
 
 // #include <fcntl.h>
-
 // int main(void)
 // {
 //     int  fd;

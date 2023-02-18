@@ -54,3 +54,12 @@ char	*ft_strncpy(char *dst, const char *src, size_t n)
 	dst[i] = '\0';
 	return (dst);
 }
+
+char	*free_func(char **s1, char **s2)
+{
+	free(*s1);
+	free(*s2);
+	*s1 = NULL;
+	*s2 = NULL;
+	return (NULL);
+}
