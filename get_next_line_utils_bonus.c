@@ -12,6 +12,13 @@
 
 #include "get_next_line_bonus.h"
 
+char *free_malloc(char *str1,char *str2)
+{
+	free(str1);
+	free(str2);
+	return (NULL);
+}
+
 static char	*join1(char *ss1, char *ss2, char *p)
 {
 	int	i;
@@ -29,8 +36,8 @@ static char	*join1(char *ss1, char *ss2, char *p)
 		p[i + j] = ss2[j];
 		j++;
 	}
-	p[i + j] = 0;
-	// free(ss1);
+	p[i + j] = '\0';
+	free(ss1);
 	return (p);
 }
 
@@ -50,41 +57,72 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (join1(ss1, ss2, p));
 }
 
+// char	*ft_strjoin(char const *s1, char const *s2)
+// {
+// 	char	*p;
+// 	char	*head;
+// 	char	*ss1;
+
+// 	ss1 = (char *)s1;
+// 	if (!s1 || !s2)
+// 		return (NULL);
+// 	p = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+// 	if (!p)
+// 		return (NULL);
+// 	head = p;
+// 	while (*s1)
+// 		*p++ = *s1++;
+// 	while (*s2)
+// 		*p++ = *s2++;
+// 	*p = '\0';
+// 	free(ss1);
+// 	return (p);
+// 	// return (join1(ss1, ss2, p));
+// }
+
+
+
+// char	*ft_strjoin(char const *s1, char const *s2)
+// {
+// 	char	*ss1;
+// 	// char	*ss2;
+// 	char	*p;
+// 	size_t	i;
+// 	size_t	j;
+
+// 	ss1 = (char *)s1;
+// 	i = 0;
+// 	j = 0;
+// 	ss1 = (char *)s1;
+// 	// ss2 = (char *)s2;
+// 	if (!s1 || !s2)
+// 		return (NULL);
+// 	p = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+// 	if (!p)
+// 		return (NULL);
+// 	while (!s1[i])
+// 		p[i++] = s1[i++];
+// 	while (!s2[j])
+// 		p[j++] = s1[j++];
+// 	p[i + j] = 0;
+// 	free(ss1);
+// 	return (p);
+// 	// return (join1(ss1, ss2, p));
+// }
+
 size_t	ft_strlen(const char *s)
 {
-	int		i;
-	char	*str2;
+	size_t		i;
 
 	i = 0;
-	str2 = (char *)s;
-	while (str2[i] != '\0')
-	{
+	while (s[i] != '\0')
 		i++;
-	}
 	return (i);
 }
 
-char	*ft_strcpy(char *dest, char *src);
-
-char	*ft_strdup(const char *src)
+char	*ft_strncpy(char *dst, const char *src, size_t n)
 {
-	char	*p;
-	char	*src2;
-
-	src2 = (char *)src;
-	p = malloc(ft_strlen(src2) + 1);
-	if (!(p))
-		return (NULL);
-	if (p)
-	{
-		ft_strncpy (p, src2, ft_strlen(src2));
-	}
-	return (p);
-}
-
-char	*ft_strncpy(char *dst, char *src, int n)
-{
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < n)
@@ -95,3 +133,4 @@ char	*ft_strncpy(char *dst, char *src, int n)
 	dst[i] = '\0';
 	return (dst);
 }
+

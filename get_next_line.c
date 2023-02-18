@@ -56,23 +56,37 @@ static char	*make_memo(int fd, char *save)
 		// printf("memo2;%s", memo);
 
 		if (read_byte < 0)
-			return (free_func(&memo,&save));
+		{
+			free(memo);
+			free(save);
+			return (NULL);
+		}
+			//return (free_func(&memo,&save));
 		memo[read_byte] = '\0';
 		tmp = ft_strjoin(save, memo);
 		if (!tmp)
-			return (free_func(&memo,NULL));
-		free(save);
+		{
+			free(memo);
+			return (NULL);
+		}
+			//return (free_func(&memo,NULL));
+		// if (save) {
+		// 	free(save);
+		// 	save = NULL;
+		// }
 		// printf("tmp;%p\n",tmp);
 		save = tmp;
 		if (check(memo) != -1 || read_byte == 0)
 		{
-			printf("test\n");
 			// printf("readbyte;%zd\n",read_byte);
 			break ;
 		}
 	}
-	// if (memo != NULL)
-	free(memo);
+	 if (memo)
+	 {
+		free(memo);
+		memo = NULL;
+	 }
 	return (save);
 }
 
@@ -84,6 +98,7 @@ static char	*read_memo(char *save)
 	if (!save[0])
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	find = check(save);
@@ -113,12 +128,14 @@ char	*make_save(char *save)
 	if (find == -1)
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	save_new = (char *)malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
 	if (!save_new)
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	while (save[find + i + 1] != '\0')
@@ -128,7 +145,11 @@ char	*make_save(char *save)
 	}
 	save_new[i] = '\0';
 	// printf("savep;%p",save);
-	free(save);
+	if (save)
+	{
+		free(save);
+		save = NULL;
+	}
 	return (save_new);
 }
 
@@ -148,9 +169,7 @@ char	*get_next_line(int fd)
 	line = read_memo(save);
 	if (!line)
 	{
-		// printf("hi");
 		return (NULL);
-
 	}
 	save = make_save(save);
 	return (line);

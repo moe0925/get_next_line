@@ -12,9 +12,9 @@
 
 #include "get_next_line_bonus.h"
 
-int	check(char *str)
+static ssize_t	check(char *str)
 {
-	int	i;
+	ssize_t	i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -28,26 +28,24 @@ int	check(char *str)
 
 char	*make_memo(int fd, char *save)
 {
-	int		read_byte;
+	ssize_t		read_byte;
 	char	*memo;
 
-	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
+	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!memo)
+		return (NULL);
 	if (!save)
 	{
 		save = (char *)malloc(sizeof(char) * 1);
+		if (!save)
+			return (NULL);
 		save[0] = '\0';
 	}
-	if (!save || !memo)
-		return (NULL);
 	while (1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
 		if (read_byte < 0)
-		{
-			free(memo);
-			free(save);
-			return (NULL);
-		}
+			return (free_malloc(memo, save));
 		memo[read_byte] = '\0';
 		save = ft_strjoin(save, memo);
 		if (check(memo) != -1 || read_byte == 0)
@@ -59,7 +57,7 @@ char	*make_memo(int fd, char *save)
 
 char	*read_memo(char *save)
 {
-	int		find;
+	ssize_t		find;
 	char	*line;
 
 	if (!save[0])
@@ -82,8 +80,8 @@ char	*read_memo(char *save)
 
 char	*make_save(char *save)
 {
-	int		find;
-	int		i;
+	ssize_t		find;
+	size_t		i;
 	char	*save_new;
 
 	find = check(save);
