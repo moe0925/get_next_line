@@ -30,7 +30,7 @@ static char	*join1(char *ss1, char *ss2, char *p)
 		j++;
 	}
 	p[i + j] = 0;
-	free(ss1);
+	// free(ss1);
 	return (p);
 }
 

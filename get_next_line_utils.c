@@ -28,6 +28,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (*s2)
 		*str++ = *s2++;
 	*str = '\0';
+	// free(str);
 	return (head);
 }
 
