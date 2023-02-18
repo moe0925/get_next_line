@@ -12,79 +12,38 @@
 
 #include "get_next_line.h"
 
-static char	*join1(char *ss1, char *ss2, char *p)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (ss1[i] != '\0')
-	{
-		p[i] = ss1[i];
-		i++;
-	}
-	while (ss2[j] != '\0')
-	{
-		p[i + j] = ss2[j];
-		j++;
-	}
-	p[i + j] = 0;
-	free(ss1);
-	return (p);
-}
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*ss1;
-	char	*ss2;
-	char	*p;
+	char	*str;
+	char	*head;
 
-	ss1 = (char *)s1;
-	ss2 = (char *)s2;
-	if (!s1)
+	if (!s1 || !s2)
 		return (NULL);
-	p = malloc(sizeof(char) * (ft_strlen(ss1) + ft_strlen(ss2) + 1));
-	if (!p)
+	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
 		return (NULL);
-	return (join1(ss1, ss2, p));
+	head = str;
+	while (*s1)
+		*str++ = *s1++;
+	while (*s2)
+		*str++ = *s2++;
+	*str = '\0';
+	return (head);
 }
 
 size_t	ft_strlen(const char *s)
 {
-	int		i;
-	char	*str2;
+	size_t	i;
 
 	i = 0;
-	str2 = (char *)s;
-	while (str2[i] != '\0')
-	{
+	while (s[i] != '\0')
 		i++;
-	}
 	return (i);
 }
 
-char	*ft_strcpy(char *dest, char *src);
-
-char	*ft_strdup(const char *src)
+char	*ft_strncpy(char *dst, const char *src, size_t n)
 {
-	char	*p;
-	char	*src2;
-
-	src2 = (char *)src;
-	p = malloc(ft_strlen(src2) + 1);
-	if (!(p))
-		return (NULL);
-	if (p)
-	{
-		ft_strncpy (p, src2, ft_strlen(src2));
-	}
-	return (p);
-}
-
-char	*ft_strncpy(char *dst, char *src, int n)
-{
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (i < n)

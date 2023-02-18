@@ -31,16 +31,18 @@ char	*make_memo(int fd, char *save)
 {
 	int		read_byte;
 	char	*memo;
+	char	*tmp;
 
 	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
-	// printf("memo;%s",memo);
+	if (!memo)
+		return (NULL);
 	if (!save)
 	{
 		save = (char *)malloc(sizeof(char) * 1);
+		if (!save)
+			return (NULL);
 		save[0] = '\0';
 	}
-	if (!save || !memo)
-		return (NULL);
 	while (1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
@@ -51,7 +53,15 @@ char	*make_memo(int fd, char *save)
 			return (NULL);
 		}
 		memo[read_byte] = '\0';
-		save = ft_strjoin(save, memo);
+		tmp = ft_strjoin(save, memo);
+		if (!tmp)
+		{
+			free(memo);
+			free(save);
+			return (NULL);
+		}
+		free(save);
+		save = tmp;
 		// printf("readbyte;%d",read_byte);
 		// printf("check%d",check(memo));
 
@@ -122,9 +132,7 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-	{
 		return (NULL);
-	}
 	save = make_memo(fd, save);
 	if (!save)
 		return (NULL);
