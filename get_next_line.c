@@ -27,37 +27,66 @@ static ssize_t	check(char *str)
 	return (-1);
 }
 
+char *return_malloc(int  n, int i, int flag)
+{
+	char *str;
+
+	str = (char *)malloc(sizeof(char) * n + i);
+	if (!str)
+		return (NULL);
+	if (flag == 1)
+		str[0] = '\0';
+	return (str);
+}
+
 static char	*make_memo(int fd, char *save)
 {
 	ssize_t		read_byte;
 	char		*memo;
 	char		*tmp;
 
-	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
-	if (!memo)
-		return (NULL);
+	memo = return_malloc(BUFFER_SIZE, 1, 0);
+	// printf("memo1;%s", memo);
+	// printf("mempp;%p\n",memo);
 	if (!save)
-	{
-		save = (char *)malloc(sizeof(char) * 1);
-		if (!save)
-			return (NULL);
-		save[0] = '\0';
-	}
+		save = return_malloc(1, 0, 1);
 	while (1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
+		// printf("memo2;%s", memo);
+
 		if (read_byte < 0)
-			return (free_func(&memo,&save));
+		{
+			free(memo);
+			free(save);
+			return (NULL);
+		}
+			//return (free_func(&memo,&save));
 		memo[read_byte] = '\0';
 		tmp = ft_strjoin(save, memo);
 		if (!tmp)
-			return (free_func(&memo,&save));
-		free(save);
+		{
+			free(memo);
+			return (NULL);
+		}
+			//return (free_func(&memo,NULL));
+		// if (save) {
+		// 	free(save);
+		// 	save = NULL;
+		// }
+		// printf("tmp;%p\n",tmp);
 		save = tmp;
 		if (check(memo) != -1 || read_byte == 0)
+		{
+			// printf("readbyte;%zd\n",read_byte);
 			break ;
+		}
 	}
-	free(memo);
+	 if (memo)
+	 {
+		free(memo);
+		memo = NULL;
+	 }
 	return (save);
 }
 
@@ -69,6 +98,7 @@ static char	*read_memo(char *save)
 	if (!save[0])
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	find = check(save);
@@ -98,12 +128,14 @@ char	*make_save(char *save)
 	if (find == -1)
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	save_new = (char *)malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
 	if (!save_new)
 	{
 		free(save);
+		save = NULL;
 		return (NULL);
 	}
 	while (save[find + i + 1] != '\0')
@@ -112,7 +144,12 @@ char	*make_save(char *save)
 		i++;
 	}
 	save_new[i] = '\0';
-	free(save);
+	// printf("savep;%p",save);
+	if (save)
+	{
+		free(save);
+		save = NULL;
+	}
 	return (save_new);
 }
 
@@ -122,13 +159,18 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
 		return (NULL);
+	}
 	save = make_memo(fd, save);
+	// printf("savep2;%p\n",save);
 	if (!save)
 		return (NULL);
 	line = read_memo(save);
 	if (!line)
+	{
 		return (NULL);
+	}
 	save = make_save(save);
 	return (line);
 }
