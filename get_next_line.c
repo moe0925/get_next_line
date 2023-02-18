@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	check(char *str)
 {
@@ -32,8 +33,12 @@ char	*make_memo(int fd, char *save)
 	char	*memo;
 
 	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
+	// printf("memo;%s",memo);
 	if (!save)
+	{
 		save = (char *)malloc(sizeof(char) * 1);
+		save[0] = '\0';
+	}
 	if (!save || !memo)
 		return (NULL);
 	while (1)
@@ -47,8 +52,16 @@ char	*make_memo(int fd, char *save)
 		}
 		memo[read_byte] = '\0';
 		save = ft_strjoin(save, memo);
+		// printf("readbyte;%d",read_byte);
+		// printf("check%d",check(memo));
+
 		if (check(memo) != -1 || read_byte == 0)
+		{
+			// printf("hi");
+			// printf("readbyte;%d",read_byte);
+			// printf("check;%d",read_byte);
 			break ;
+		}
 	}
 	free(memo);
 	return (save);
@@ -120,11 +133,14 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
+// #include <fcntl.h>
+
 // int main(void)
 // {
 //     int  fd;
 //     char *line;
 //     int  check;
+
 //     line = "";
 //     fd = open("text.txt", O_RDONLY);
 //     // fd =1000;

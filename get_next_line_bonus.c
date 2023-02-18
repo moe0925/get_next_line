@@ -33,7 +33,10 @@ char	*make_memo(int fd, char *save)
 
 	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE +1));
 	if (!save)
+	{
 		save = (char *)malloc(sizeof(char) * 1);
+		save[0] = '\0';
+	}
 	if (!save || !memo)
 		return (NULL);
 	while (1)
