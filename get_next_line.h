@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/13 19:44:40 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/19 05:12:39 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,14 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-#ifndef BUFFER_SIZE
+# ifndef BUFFER_SIZE
 # define BUFFER_SIZE  42
-#endif
+# endif
 
-//------------------------------------------------
-//  マクロ定義(Macro definition)
-//------------------------------------------------
-//------------------------------------------------
-//  型定義(Type definition)
-//------------------------------------------------
-//------------------------------------------------
-//  プロトタイプ宣言(Prototype declaration)
-//------------------------------------------------
 char	*get_next_line(int fd);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
 char	*ft_strncpy(char *dst, const char *src, size_t n);
-char	*free_func(char **s1, char **s2);
-
+char	*free_malloc(char *str1, char *str2);
 
 #endif

@@ -6,12 +6,11 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/13 19:35:34 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/19 04:42:10 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static ssize_t	check(char *str)
 {
@@ -27,80 +26,42 @@ static ssize_t	check(char *str)
 	return (-1);
 }
 
-char *return_malloc(int  n, int i, int flag)
-{
-	char *str;
-
-	str = (char *)malloc(sizeof(char) * n + i);
-	if (!str)
-		return (NULL);
-	if (flag == 1)
-		str[0] = '\0';
-	return (str);
-}
-
-static char	*make_memo(int fd, char *save)
+char	*make_memo(int fd, char *save)
 {
 	ssize_t		read_byte;
-	char		*memo;
-	char		*tmp;
+	char	*memo;
 
-	memo = return_malloc(BUFFER_SIZE, 1, 0);
-	// printf("memo1;%s", memo);
-	// printf("mempp;%p\n",memo);
+	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!memo)
+		return (NULL);
 	if (!save)
-		save = return_malloc(1, 0, 1);
+	{
+		save = (char *)malloc(sizeof(char) * 1);
+		if (!save)
+			return (NULL);
+		save[0] = '\0';
+	}
 	while (1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
-		// printf("memo2;%s", memo);
-
 		if (read_byte < 0)
-		{
-			free(memo);
-			free(save);
-			return (NULL);
-		}
-			//return (free_func(&memo,&save));
+			return (free_malloc(memo, save));
 		memo[read_byte] = '\0';
-		tmp = ft_strjoin(save, memo);
-		if (!tmp)
-		{
-			free(memo);
-			return (NULL);
-		}
-			//return (free_func(&memo,NULL));
-		// if (save) {
-		// 	free(save);
-		// 	save = NULL;
-		// }
-		// printf("tmp;%p\n",tmp);
-		save = tmp;
+		save = ft_strjoin(save, memo);
 		if (check(memo) != -1 || read_byte == 0)
-		{
-			// printf("readbyte;%zd\n",read_byte);
 			break ;
-		}
 	}
-	 if (memo)
-	 {
-		free(memo);
-		memo = NULL;
-	 }
+	free(memo);
 	return (save);
 }
 
-static char	*read_memo(char *save)
+char	*read_memo(char *save)
 {
 	ssize_t		find;
-	char		*line;
+	char	*line;
 
 	if (!save[0])
-	{
-		free(save);
-		save = NULL;
 		return (NULL);
-	}
 	find = check(save);
 	if (find == -1 && (save))
 	{
@@ -121,35 +82,25 @@ char	*make_save(char *save)
 {
 	ssize_t		find;
 	size_t		i;
-	char		*save_new;
+	char	*save_new;
 
 	find = check(save);
 	i = 0;
 	if (find == -1)
 	{
 		free(save);
-		save = NULL;
 		return (NULL);
 	}
 	save_new = (char *)malloc(sizeof(char) * (ft_strlen(save) - (find + 1)));
 	if (!save_new)
-	{
-		free(save);
-		save = NULL;
 		return (NULL);
-	}
 	while (save[find + i + 1] != '\0')
 	{
 		save_new[i] = save[find + i + 1];
 		i++;
 	}
 	save_new[i] = '\0';
-	// printf("savep;%p",save);
-	if (save)
-	{
-		free(save);
-		save = NULL;
-	}
+	free(save);
 	return (save_new);
 }
 
@@ -158,24 +109,39 @@ char	*get_next_line(int fd)
 	static char	*save;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
 	{
 		return (NULL);
 	}
 	save = make_memo(fd, save);
-	// printf("savep2;%p\n",save);
 	if (!save)
 		return (NULL);
 	line = read_memo(save);
-	if (!line)
-	{
-		return (NULL);
-	}
 	save = make_save(save);
 	return (line);
 }
 
-// #include <fcntl.h>
+// char *get_next_line(int fd)
+// {
+//     static char *save[257];
+//     char *line;
+
+//     if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
+//     {
+//         return (NULL);
+//     }
+
+//     save[fd] = make_memo(fd, save[fd]);
+//     if (!save[fd])
+//     {
+//         return (NULL);
+
+//     }
+//     line = read_memo(save[fd]);
+//     save[fd] = make_save(save[fd]);
+//     return (line);
+// }
+
 // int main(void)
 // {
 //     int  fd;
@@ -191,9 +157,11 @@ char	*get_next_line(int fd)
 // 			return 0;
 // 	}
 //     check = 1;
+
 //     while (line)
 //     {
 //     line = get_next_line(fd);
+
 //     printf("> %s", line);
 //     check++;
 //     free(line);
@@ -201,3 +169,4 @@ char	*get_next_line(int fd)
 //     // system("leaks a.out");
 //     return (0);
 // }
+
