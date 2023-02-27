@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char *free_malloc(char *str1,char *str2)
+char	*free_malloc(char *str1, char *str2)
 {
 	free(str1);
 	free(str2);
@@ -33,7 +33,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char		*head;
 	char		*p;
-	char 		*ss1;
+	char		*ss1;
 
 	ss1 = (char *)s1;
 	if (!s1 && !s2)

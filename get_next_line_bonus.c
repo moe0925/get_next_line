@@ -29,7 +29,7 @@ static ssize_t	check(char *str)
 char	*make_memo(int fd, char *save)
 {
 	ssize_t		read_byte;
-	char	*memo;
+	char		*memo;
 
 	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!memo)
@@ -58,7 +58,7 @@ char	*make_memo(int fd, char *save)
 char	*read_memo(char *save)
 {
 	ssize_t		find;
-	char	*line;
+	char		*line;
 
 	if (!save[0])
 		return (NULL);
@@ -82,7 +82,7 @@ char	*make_save(char *save)
 {
 	ssize_t		find;
 	size_t		i;
-	char	*save_new;
+	char		*save_new;
 
 	find = check(save);
 	i = 0;

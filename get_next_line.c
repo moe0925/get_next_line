@@ -29,11 +29,8 @@ static ssize_t	check(char *str)
 char	*make_memo(int fd, char *save)
 {
 	ssize_t		read_byte;
-	char	*memo;
+	char		*memo;
 
-	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!memo)
-		return (NULL);
 	if (!save)
 	{
 		save = (char *)malloc(sizeof(char) * 1);
@@ -41,6 +38,9 @@ char	*make_memo(int fd, char *save)
 			return (NULL);
 		save[0] = '\0';
 	}
+	memo = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!memo)
+		free_malloc(save, NULL);
 	while (1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
@@ -48,7 +48,7 @@ char	*make_memo(int fd, char *save)
 			return (free_malloc(memo, save));
 		memo[read_byte] = '\0';
 		save = ft_strjoin(save, memo);
-		if (check(memo) != -1 || read_byte == 0)
+		if ((!save) || check(memo) != -1 || read_byte == 0)
 			break ;
 	}
 	free(memo);
@@ -58,7 +58,7 @@ char	*make_memo(int fd, char *save)
 char	*read_memo(char *save)
 {
 	ssize_t		find;
-	char	*line;
+	char		*line;
 
 	if (!save[0])
 		return (NULL);
@@ -82,7 +82,7 @@ char	*make_save(char *save)
 {
 	ssize_t		find;
 	size_t		i;
-	char	*save_new;
+	char		*save_new;
 
 	find = check(save);
 	i = 0;
@@ -121,27 +121,8 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// char *get_next_line(int fd)
-// {
-//     static char *save[257];
-//     char *line;
-
-//     if (fd < 0 || BUFFER_SIZE <= 0 || fd > 256)
-//     {
-//         return (NULL);
-//     }
-
-//     save[fd] = make_memo(fd, save[fd]);
-//     if (!save[fd])
-//     {
-//         return (NULL);
-
-//     }
-//     line = read_memo(save[fd]);
-//     save[fd] = make_save(save[fd]);
-//     return (line);
-// }
-
+// #include <stdio.h>
+// #include <fcntl.h>
 // int main(void)
 // {
 //     int  fd;
@@ -169,4 +150,3 @@ char	*get_next_line(int fd)
 //     // system("leaks a.out");
 //     return (0);
 // }
-
