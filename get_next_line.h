@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/27 20:09:44 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/27 21:12:02 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ size_t	ft_strlen(const char *s);
 char	*ft_strncpy(char *dst, const char *src, size_t n);
 char	*free_malloc(char *str1, char *str2);
 char	*ft_strchr(const char *s, int c);
+char	*return_calloc(char *save);
+
 
 
 #endif

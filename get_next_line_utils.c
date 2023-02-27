@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/27 19:51:25 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/27 21:11:21 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,14 @@ char	*free_malloc(char *str1, char *str2)
 	return (NULL);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*return_calloc(char *save)
 {
-	int		i;
-	char	*s2;
-
-	while (c > 256)
-		c = c % 256;
-	s2 = (char *)s;
-	i = 0;
-	if (c == 0)
-	{
-		while (s2[i] != '\0')
-			i++;
-		return (&(s2[i]));
-	}
-	while (s2[i] != '\0')
-	{
-		if (s2[i] == (char)c)
-			return (&s2[i]);
-		else
-			i++;
-	}
-	return (NULL);
+	save = (char *)malloc(sizeof(char) * 1);
+		if (!save)
+			return (NULL);
+	save[0] = '\0';
+	return (save);
 }
-
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
