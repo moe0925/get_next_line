@@ -6,7 +6,7 @@
 /*   By: moeota <moeota@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 22:58:35 by moeota            #+#    #+#             */
-/*   Updated: 2023/02/27 20:15:11 by moeota           ###   ########.fr       */
+/*   Updated: 2023/02/27 20:22:42 by moeota           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*make_memo(int fd, char *save)
 	while (read_byte != 0 && check(memo)== -1)
 	{
 		read_byte = read(fd, memo, BUFFER_SIZE);
-		printf("\nmemo;%s\n", memo);
+		// printf("\nmemo;%s\n", memo);
 		if (read_byte == -1)
 		{
 			free(memo);
@@ -99,7 +99,7 @@ char	*read_memo(char *save)
 		if (!line)
 			return (NULL);
 		line = ft_strncpy(line, save, ft_strlen(save));
-		printf("\nline;%s\n", line);
+		// printf("\nline;%s\n", line);
 		return (line);
 	}
 	line = (char *)malloc(sizeof(char) * (find + 2));
@@ -107,7 +107,7 @@ char	*read_memo(char *save)
 	if (!line)
 		return (NULL);
 	line = ft_strncpy(line, save, (find + 1));
-	printf("\nline;%s\n", line);
+	// printf("\nline;%s\n", line);
 	return (line);
 }
 
@@ -134,7 +134,7 @@ char	*make_save(char *save)
 		i++;
 	}
 	save_new[i] = '\0';
-	printf("\nsave_new;%s\n", save_new);
+	// printf("\nsave_new;%s\n", save_new);
 	free(save);
 	return (save_new);
 }
@@ -156,34 +156,34 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-#include <stdio.h>
-#include <fcntl.h>
-int main(void)
-{
-    int  fd;
-    char *line;
-    int  check;
+// #include <stdio.h>
+// #include <fcntl.h>
+// int main(void)
+// {
+//     int  fd;
+//     char *line;
+//     int  check;
 	
-    line = "";
-    fd = open("text.txt", O_RDONLY);
-    // fd =1000;
-    if (fd == -1)
-	{
-			printf("ファイルオープンエラー\n");
-			return 0;
-	}
-    check = 1;
+//     line = "";
+//     fd = open("text.txt", O_RDONLY);
+//     // fd =1000;
+//     if (fd == -1)
+// 	{
+// 			printf("ファイルオープンエラー\n");
+// 			return 0;
+// 	}
+//     check = 1;
 
-    while (line)
-    {
-    line = get_next_line(fd);
+//     while (line)
+//     {
+//     line = get_next_line(fd);
 	
-    printf("> %s", line);
-	if (!line)
-		break ;
-    check++;
-    free(line);
-    }
-    // system("leaks a.out");
-    return (0);
-}
+//     printf("> %s", line);
+// 	if (!line)
+// 		break ;
+//     check++;
+//     free(line);
+//     }
+//     // system("leaks a.out");
+//     return (0);
+// }
